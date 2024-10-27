@@ -11,7 +11,7 @@ public class Soldier: MonoBehaviour {
 	private bool isdead=false;
 	//--
 	void Start () {
-		maxspeed=1f;//Set walk speed
+		maxspeed=2f;//Set walk speed
 		faceright=true;//Default right side
 		anim = this.gameObject.GetComponent<Animator> ();
 		anim.SetBool ("walk", false);//Walking animation is deactivated
@@ -29,41 +29,57 @@ public class Soldier: MonoBehaviour {
 	void Update () {
 		if(isdead==false){
 			//--DYING
-			if(Input.GetKey ("k")){//###########Change the dead event, for example: life bar=0
-				anim.SetBool ("dead", true);
-				isdead=true;
-			}
+			//if(Input.GetKey ("k")){//###########Change the dead event, for example: life bar=0
+			//	anim.SetBool ("dead", true);
+			//	isdead=true;
+			//}
 			//--END DYING
 
 			//--JUMPING
-			if (Input.GetButtonDown("Jump")){//Saltar
-				if(jumping==false){//only once time each jump
-					GetComponent<Rigidbody2D>().AddForce(new Vector2(0f,200));
-					jumping=true;
-					anim.SetBool ("jump", true);
-				}
-			}
+			//if (Input.GetButtonDown("Jump")){//Saltar
+			//	if(jumping==false){//only once time each jump
+			//		GetComponent<Rigidbody2D>().AddForce(new Vector2(0f,200));
+			//		jumping=true;
+			//		anim.SetBool ("jump", true);
+			//	}
+			//}
 			//--END JUMPING
 
-			//--WALKING
-			float move = Input.GetAxis ("Horizontal");
-			GetComponent<Rigidbody2D>().velocity = new Vector2(move * maxspeed, GetComponent<Rigidbody2D>().velocity.y);
-			if(move>0){//Go right
+			//--WALKING 
+			float move_x = Input.GetAxis ("Horizontal");
+			GetComponent<Rigidbody2D>().velocity = new Vector2(move_x * maxspeed, GetComponent<Rigidbody2D>().velocity.y);
+			if(move_x>0){//Go right
 				anim.SetBool ("walk", true);//Walking animation is activated
 				if(faceright==false){
 					Flip ();
 				}
-			}
-			if(move==0){//Stop
-				anim.SetBool ("walk", false);
-			}			
-			if((move<0)){//Go left
+			}		
+			if((move_x<0)){//Go left
 				anim.SetBool ("walk", true);
 				if(faceright==true){
 					Flip ();
 				}
 			}
-			//END WALKING
+
+			float move_y = Input.GetAxis("Vertical");
+			GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, move_y * maxspeed);
+			if (move_y > 0)
+			{//Go down
+				anim.SetBool("walk", true);//Walking animation is activated
+				
+			}
+			if ((move_y < 0))
+			{//Go left
+				anim.SetBool("walk", true);
+				
+			}
+			if (move_x == 0 && move_y == 0)
+			{//Stop
+				anim.SetBool("walk", false);
+			}
+
+
+
 		}
 	}
 
